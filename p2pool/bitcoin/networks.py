@@ -65,6 +65,27 @@ nets = dict(
         DUST_THRESHOLD=0.001e8,
     ),
 
+    summercoin=math.Object(
+        P2P_PREFIX='70352205'.decode('hex'),
+        P2P_PORT=11110,
+        ADDRESS_VERSION=63,
+        RPC_PORT=11111,
+        RPC_CHECK=defer.inlineCallbacks(lambda bitcoind: defer.returnValue(
+            'summercoinaddress' in (yield bitcoind.rpc_help()) and
+            not (yield bitcoind.rpc_getinfo())['testnet']
+        )),
+        SUBSIDY_FUNC=lambda h: 1500,
+        POW_FUNC=lambda data: pack.IntType(256).unpack(__import__('xcoin_hash').getPoWHash(data)),
+        BLOCK_PERIOD=45, # s
+        SYMBOL='SUM',
+        CONF_FILE_FUNC=lambda: os.path.join(os.path.join(os.environ['APPDATA'], 'summercoin') if platform.system() == 'Windows' else os.path.expanduser('~/Library/Application Support/summercoin/') if platform.system() == 'Darwin' else os.path.expanduser('~/.summercoin'), 'summercoin.conf'),
+        BLOCK_EXPLORER_URL_PREFIX='',
+        ADDRESS_EXPLORER_URL_PREFIX='',
+        TX_EXPLORER_URL_PREFIX='',
+        SANE_TARGET_RANGE=(2**256//2**32//1000 - 1, 2**256//2**20 - 1),
+        DUMB_SCRYPT_DIFF=1,
+        DUST_THRESHOLD=0.001e8,
+    ),
 
 )
 for net_name, net in nets.iteritems():
