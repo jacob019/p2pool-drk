@@ -51,6 +51,27 @@ nets = dict(
         ANNOUNCE_CHANNEL='#p2pool-drk',
         VERSION_CHECK=lambda v: True,
     ),
+    
+    summercoin=math.Object(
+        PARENT=networks.nets['summercoin'],
+        SHARE_PERIOD=10, # seconds
+        NEW_SHARE_PERIOD=10, # seconds
+        CHAIN_LENGTH=24*60*60//10, # shares
+        REAL_CHAIN_LENGTH=24*60*60//10, # shares
+        TARGET_LOOKBEHIND=200, # shares  //with that the pools share diff is adjusting faster, important if huge hashing power comes to the pool
+        SPREAD=15, # blocks
+        NEW_SPREAD=15, # blocks
+        IDENTIFIER='dcb9969cbc7d2c25'.decode('hex'),
+        PREFIX='82b44f6ab84aaff6'.decode('hex'),
+        P2P_PORT=6705,
+        MIN_TARGET=0,
+        MAX_TARGET=2**256//2**20 - 1,
+        PERSIST=False,
+        WORKER_PORT=7903,
+        BOOTSTRAP_ADDRS='vtc.1js.us'.split(' '),
+        ANNOUNCE_CHANNEL='#p2pool-alt',
+        VERSION_CHECK=lambda v: True,
+    ),
 
 )
 for net_name, net in nets.iteritems():
